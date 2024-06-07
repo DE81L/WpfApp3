@@ -50,7 +50,32 @@
                     <Button Content="Add Stock" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="AddStock_Click"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="Antibiotics 24/7">
+                <Grid>
+                    <DataGrid x:Name="AntibioticsDataGrid" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Pharmacy ID" Binding="{Binding PharmacyId}" Width="Auto"/>
+                            <DataGridTextColumn Header="Pharmacy Name" Binding="{Binding PharmacyName}" Width="*"/>
+                            <DataGridTextColumn Header="Pharmacy Address" Binding="{Binding PharmacyAddress}" Width="*"/>
+                            <DataGridTextColumn Header="Drug Name" Binding="{Binding DrugName}" Width="Auto"/>
+                            <DataGridTextColumn Header="Dosage" Binding="{Binding Dosage}" Width="Auto"/>
+                            <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="Auto"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Content="Load Data" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="LoadAntibioticsData_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Drug Prices">
+                <Grid>
+                    <DataGrid x:Name="DrugPricesDataGrid" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Drug Name" Binding="{Binding DrugName}" Width="*"/>
+                            <DataGridTextColumn Header="Average Price" Binding="{Binding AveragePrice}" Width="Auto"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button Content="Analyze" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="AnalyzeDrugPrices_Click"/>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
-
 </Window>
