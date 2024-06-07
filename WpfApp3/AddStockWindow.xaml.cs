@@ -1,48 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using WpfApp3.Models;
-using WpfApp3.Services;
 
 namespace WpfApp3
 {
-    /// <summary>
-    /// Логика взаимодействия для AddStockWindow.xaml
-    /// </summary>
     public partial class AddStockWindow : Window
     {
-        private DataService _dataService;
+        // Свойство для хранения нового объекта Stock
+        public Stock Stock { get; private set; }
 
-        public AddStockWindow(DataService dataService)
+        // Конструктор
+        public AddStockWindow()
         {
             InitializeComponent();
-            _dataService = dataService;
         }
 
+        // Обработчик события нажатия кнопки "Добавить"
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            var stock = new Stock
+            try
             {
-                PharmacyId = int.Parse(PharmacyIdTextBox.Text),
-                DrugId = int.Parse(DrugIdTextBox.Text),
-                ReleaseDate = DateTime.Parse(ReleaseDateTextBox.Text),
-                Quantity = int.Parse(QuantityTextBox.Text),
-                Price = decimal.Parse(PriceTextBox.Text)
-            };
+                // Создание нового объекта Stock с данными из текстовых полей
+                Stock = new Stock
+                {
+                    PharmacyId = int.Parse(PharmacyIdTextBox.Text),
+                    DrugId = int.Parse(DrugIdTextBox.Text),
+                    ReleaseDate = DateTime.Parse(ReleaseDateTextBox.Text),
+                    Quantity = int.Parse(QuantityTextBox.Text),
+                    Price = decimal.Parse(PriceTextBox.Text)
+                };
 
-            _dataService.AddStock(stock);
-            this.Close();
+                // Проверка корректности введенных данных о запасах
+                Stock.Validate();
+
+                // Установка DialogResult в true для указания успешного добавления
+                DialogResult = true;
+            }
+            catch (Exception ex)
+            {
+                // Вывод сообщения об ошибке, если происходит исключение при создании или проверке запасов
+                MessageBox.Show($"Error: {ex.Message}", "Invalid input", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
-
 }

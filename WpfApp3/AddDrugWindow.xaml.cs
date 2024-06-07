@@ -1,47 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using WpfApp3.Models;
-using WpfApp3.Services;
 
 namespace WpfApp3
 {
-    /// <summary>
-    /// Логика взаимодействия для AddDrugWindow.xaml
-    /// </summary>
     public partial class AddDrugWindow : Window
     {
-        private DataService _dataService;
+        // Свойство для хранения нового объекта Drug
+        public Drug Drug { get; private set; }
 
-        public AddDrugWindow(DataService dataService)
+        // Конструктор
+        public AddDrugWindow()
         {
             InitializeComponent();
-            _dataService = dataService;
         }
 
+        // Обработчик события нажатия кнопки "Добавить"
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            var drug = new Drug
+            try
             {
-                Name = NameTextBox.Text,
-                Group = GroupTextBox.Text,
-                Dosage = DosageTextBox.Text,
-                ShelfLife = int.Parse(ShelfLifeTextBox.Text)
-            };
+                // Создание нового объекта Drug с данными из текстовых полей
+                Drug = new Drug
+                {
+                    Name = NameTextBox.Text,
+                    Group = GroupTextBox.Text,
+                    Dosage = DosageTextBox.Text,
+                    ShelfLife = int.Parse(ShelfLifeTextBox.Text)
+                };
 
-            _dataService.AddDrug(drug);
-            this.Close();
+                // Проверка корректности введенных данных о лекарстве
+                Drug.Validate();
+
+                // Установка DialogResult в true для указания успешного добавления
+                DialogResult = true;
+            }
+            catch (Exception ex)
+            {
+                // Вывод сообщения об ошибке, если происходит исключение при создании или проверке лекарства
+                MessageBox.Show($"Error: {ex.Message}", "Invalid input", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
-
 }

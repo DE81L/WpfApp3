@@ -1,62 +1,88 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using Microsoft.Win32;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using WpfApp3.Models;
 using WpfApp3.Services;
 
 namespace WpfApp3
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private DataService _dataService;
+        private readonly DataService _dataService;
 
+        // Конструктор
         public MainWindow()
         {
             InitializeComponent();
+            // Создание экземпляра DataService для доступа к данным
             _dataService = new DataService();
-            LoadData();
+            // Обновление отображаемых данных в таблицах
+            RefreshDataGrids();
         }
 
-        private void LoadData()
+        // Метод для обновления данных в таблицах
+        private void RefreshDataGrids()
         {
-            PharmacyDataGrid.ItemsSource = _dataService.Pharmacies;
-            DrugDataGrid.ItemsSource = _dataService.Drugs;
-            StockDataGrid.ItemsSource = _dataService.Stock;
+            // Загрузка данных аптек, лекарств и запасов в соответствующие таблицы
+            PharmacyDataGrid.ItemsSource = _dataService.Pharmacies.ToList();
+            DrugDataGrid.ItemsSource = _dataService.Drugs.ToList();
+            StockDataGrid.ItemsSource = _dataService.Stock.ToList();
         }
 
+        // Обработчик события нажатия кнопки "Добавить аптеку"
         private void AddPharmacy_Click(object sender, RoutedEventArgs e)
         {
-            var addPharmacyWindow = new AddPharmacyWindow(_dataService);
-            addPharmacyWindow.ShowDialog();
-            LoadData();
+            // Открытие окна добавления аптеки
+            var addPharmacyWindow = new AddPharmacyWindow();
+            // Если окно закрывается с результатом true (т.е. аптека успешно добавлена)
+            if (addPharmacyWindow.ShowDialog() == true)
+            {
+                // Добавление аптеки в данные и обновление таблиц
+                _dataService.AddPharmacy(addPharmacyWindow.Pharmacy);
+                RefreshDataGrids();
+            }
         }
 
+        // Обработчик события нажатия кнопки "Добавить лекарство"
         private void AddDrug_Click(object sender, RoutedEventArgs e)
         {
-            var addDrugWindow = new AddDrugWindow(_dataService);
-            addDrugWindow.ShowDialog();
-            LoadData();
+            // Открытие окна добавления лекарства
+            var addDrugWindow = new AddDrugWindow();
+            // Если окно закрывается с результатом true (т.е. лекарство успешно добавлено)
+            if (addDrugWindow.ShowDialog() == true)
+            {
+                // Добавление лекарства в данные и обновление таблиц
+                _dataService.AddDrug(addDrugWindow.Drug);
+                RefreshDataGrids();
+            }
         }
 
+        // Обработчик события нажатия кнопки "Добавить запасы"
         private void AddStock_Click(object sender, RoutedEventArgs e)
         {
-            var addStockWindow = new AddStockWindow(_dataService);
-            addStockWindow.ShowDialog();
-            LoadData();
+            // Открытие окна добавления запасов
+            var addStockWindow = new AddStockWindow();
+            // Если окно закрывается с результатом true (т.е. запасы успешно добавлены)
+            if (addStockWindow.ShowDialog() == true)
+            {
+                // Добавление запасов в данные и обновление таблиц
+                _dataService.AddStock(addStockWindow.Stock);
+                RefreshDataGrids();
+            }
+        }
+
+        // Обработчик события нажатия кнопки "Загрузить данные об антибиотиках"
+        private void LoadAntibioticsData_Click(object sender, RoutedEventArgs e)
+        {
+            // Загрузка и отображение данных об антибиотиках
+            AntibioticsDataGrid.ItemsSource = _dataService.Find24HourAntibiotics();
+        }
+
+        // Обработчик события нажатия кнопки "Анализ цен на лекарства"
+        private void AnalyzeDrugPrices_Click(object sender, RoutedEventArgs e)
+        {
+            // Анализ цен на лекарства и отображение результатов
+            DrugPricesDataGrid.ItemsSource = _dataService.AnalyzeDrugPrices();
         }
     }
 }
