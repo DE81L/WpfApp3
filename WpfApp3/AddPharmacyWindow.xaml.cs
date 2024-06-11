@@ -7,12 +7,19 @@ namespace WpfApp3
     public partial class AddPharmacyWindow : Window
     {
         // Свойство для хранения нового объекта Pharmacy
-        public Pharmacy Pharmacy { get; private set; }
+        public Pharmacy Pharmacy { get; set; }
 
         // Конструктор
         public AddPharmacyWindow()
         {
             InitializeComponent();
+            Pharmacy = new Pharmacy();
+            DataContext = Pharmacy;
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
         }
 
         // Обработчик события нажатия кнопки "Добавить"

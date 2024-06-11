@@ -11,11 +11,19 @@ namespace WpfApp3.Models
         public int StartHour { get; set; }
         public int EndHour { get; set; }
 
+        public event EventHandler PharmacyChanged;
+
         public void Validate()
         {
             //простая проверка на соответствие часовому формату
             if (StartHour < 0 || StartHour > 24 || EndHour < 0 || EndHour > 24)
                 throw new ArgumentException("Start and end hours must be between 0 and 24.");
         }
+
+        public void Save()
+        {
+            PharmacyChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
+
 }

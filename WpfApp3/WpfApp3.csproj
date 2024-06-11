@@ -67,7 +67,12 @@
     <Compile Include="AddStockWindow.xaml.cs">
       <DependentUpon>AddStockWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="AuthService.cs" />
+    <Compile Include="LoginWindow.xaml.cs">
+      <DependentUpon>LoginWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Services\DataService.cs" />
+    <Compile Include="User.cs" />
     <Page Include="AddDrugWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -77,6 +82,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="AddStockWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoginWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

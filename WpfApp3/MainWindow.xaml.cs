@@ -9,79 +9,146 @@ namespace WpfApp3
     public partial class MainWindow : Window
     {
         private readonly DataService _dataService;
+        private User _currentUser;
 
-        // Конструктор
         public MainWindow()
         {
             InitializeComponent();
-            // Создание экземпляра DataService для доступа к данным
             _dataService = new DataService();
-            // Обновление отображаемых данных в таблицах
-            RefreshDataGrids();
+
+            // Окно авторизации
+            var authService = new AuthService();
+            var loginWindow = new LoginWindow(authService);
+            if (loginWindow.ShowDialog() == true)
+            {
+                _currentUser = loginWindow.LoggedInUser;
+                LoadData();
+            }
+            else
+            {
+                Close();
+            }
         }
 
-        // Метод для обновления данных в таблицах
-        private void RefreshDataGrids()
+        private void LoadData()
         {
-            // Загрузка данных аптек, лекарств и запасов в соответствующие таблицы
-            PharmacyDataGrid.ItemsSource = _dataService.Pharmacies.ToList();
-            DrugDataGrid.ItemsSource = _dataService.Drugs.ToList();
-            StockDataGrid.ItemsSource = _dataService.Stock.ToList();
+            PharmacyDataGrid.ItemsSource = _dataService.Pharmacies;
+            DrugDataGrid.ItemsSource = _dataService.Drugs;
+            StockDataGrid.ItemsSource = _dataService.Stock;
         }
 
-        // Обработчик события нажатия кнопки "Добавить аптеку"
         private void AddPharmacy_Click(object sender, RoutedEventArgs e)
         {
-            // Открытие окна добавления аптеки
-            var addPharmacyWindow = new AddPharmacyWindow();
-            // Если окно закрывается с результатом true (т.е. аптека успешно добавлена)
-            if (addPharmacyWindow.ShowDialog() == true)
+            var window = new AddPharmacyWindow();
+            if (window.ShowDialog() == true)
             {
-                // Добавление аптеки в данные и обновление таблиц
-                _dataService.AddPharmacy(addPharmacyWindow.Pharmacy);
-                RefreshDataGrids();
+                _dataService.AddPharmacy(window.Pharmacy);
             }
         }
 
-        // Обработчик события нажатия кнопки "Добавить лекарство"
+        private void EditPharmacy_Click(object sender, RoutedEventArgs e)
+        {
+            if (PharmacyDataGrid.SelectedItem is Pharmacy selectedPharmacy)
+            {
+                var window = new AddPharmacyWindow
+                {
+                    Pharmacy = selectedPharmacy
+                };
+                if (window.ShowDialog() == true)
+                {
+                    var index = _dataService.Pharmacies.IndexOf(selectedPharmacy);
+                    _dataService.Pharmacies[index] = window.Pharmacy;
+                    _dataService.SaveData();
+                }
+            }
+        }
+
+        private void DeletePharmacy_Click(object sender, RoutedEventArgs e)
+        {
+            if (PharmacyDataGrid.SelectedItem is Pharmacy selectedPharmacy)
+            {
+                _dataService.Pharmacies.Remove(selectedPharmacy);
+                _dataService.SaveData();
+            }
+        }
+
         private void AddDrug_Click(object sender, RoutedEventArgs e)
         {
-            // Открытие окна добавления лекарства
-            var addDrugWindow = new AddDrugWindow();
-            // Если окно закрывается с результатом true (т.е. лекарство успешно добавлено)
-            if (addDrugWindow.ShowDialog() == true)
+            var window = new AddDrugWindow();
+            if (window.ShowDialog() == true)
             {
-                // Добавление лекарства в данные и обновление таблиц
-                _dataService.AddDrug(addDrugWindow.Drug);
-                RefreshDataGrids();
+                _dataService.AddDrug(window.Drug);
             }
         }
 
-        // Обработчик события нажатия кнопки "Добавить запасы"
+        private void EditDrug_Click(object sender, RoutedEventArgs e)
+        {
+            if (DrugDataGrid.SelectedItem is Drug selectedDrug)
+            {
+                var window = new AddDrugWindow
+                {
+                    Drug = selectedDrug
+                };
+                if (window.ShowDialog() == true)
+                {
+                    var index = _dataService.Drugs.IndexOf(selectedDrug);
+                    _dataService.Drugs[index] = window.Drug;
+                    _dataService.SaveData();
+                }
+            }
+        }
+
+        private void DeleteDrug_Click(object sender, RoutedEventArgs e)
+        {
+            if (DrugDataGrid.SelectedItem is Drug selectedDrug)
+            {
+                _dataService.Drugs.Remove(selectedDrug);
+                _dataService.SaveData();
+            }
+        }
+
         private void AddStock_Click(object sender, RoutedEventArgs e)
         {
-            // Открытие окна добавления запасов
-            var addStockWindow = new AddStockWindow();
-            // Если окно закрывается с результатом true (т.е. запасы успешно добавлены)
-            if (addStockWindow.ShowDialog() == true)
+            var window = new AddStockWindow();
+            if (window.ShowDialog() == true)
             {
-                // Добавление запасов в данные и обновление таблиц
-                _dataService.AddStock(addStockWindow.Stock);
-                RefreshDataGrids();
+                _dataService.AddStock(window.Stock);
             }
         }
 
-        // Обработчик события нажатия кнопки "Загрузить данные об антибиотиках"
+        private void EditStock_Click(object sender, RoutedEventArgs e)
+        {
+            if (StockDataGrid.SelectedItem is Stock selectedStock)
+            {
+                var window = new AddStockWindow
+                {
+                    Stock = selectedStock
+                };
+                if (window.ShowDialog() == true)
+                {
+                    var index = _dataService.Stock.IndexOf(selectedStock);
+                    _dataService.Stock[index] = window.Stock;
+                    _dataService.SaveData();
+                }
+            }
+        }
+
+        private void DeleteStock_Click(object sender, RoutedEventArgs e)
+        {
+            if (StockDataGrid.SelectedItem is Stock selectedStock)
+            {
+                _dataService.Stock.Remove(selectedStock);
+                _dataService.SaveData();
+            }
+        }
+
         private void LoadAntibioticsData_Click(object sender, RoutedEventArgs e)
         {
-            // Загрузка и отображение данных об антибиотиках
             AntibioticsDataGrid.ItemsSource = _dataService.Find24HourAntibiotics();
         }
 
-        // Обработчик события нажатия кнопки "Анализ цен на лекарства"
         private void AnalyzeDrugPrices_Click(object sender, RoutedEventArgs e)
         {
-            // Анализ цен на лекарства и отображение результатов
             DrugPricesDataGrid.ItemsSource = _dataService.AnalyzeDrugPrices();
         }
     }

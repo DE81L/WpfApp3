@@ -10,6 +10,7 @@ namespace WpfApp3.Models
         public DateTime ReleaseDate { get; set; }
         public int Quantity { get; set; }
         public decimal Price { get; set; }
+        public int StockId { get; internal set; }
 
         public void Validate()
         {

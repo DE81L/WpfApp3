@@ -7,12 +7,18 @@ namespace WpfApp3
     public partial class AddStockWindow : Window
     {
         // Свойство для хранения нового объекта Stock
-        public Stock Stock { get; private set; }
+        public Stock Stock { get; set; }
 
-        // Конструктор
         public AddStockWindow()
         {
             InitializeComponent();
+            Stock = new Stock();
+            DataContext = Stock;
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            DialogResult = true;
         }
 
         // Обработчик события нажатия кнопки "Добавить"

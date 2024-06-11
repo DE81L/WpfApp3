@@ -1,10 +1,6 @@
 ﻿<Window x:Class="WpfApp3.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfApp3"
-        mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <TabControl>
@@ -19,7 +15,11 @@
                             <DataGridTextColumn Header="End Hour" Binding="{Binding EndHour}" Width="Auto"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Content="Add Pharmacy" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="AddPharmacy_Click"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                        <Button Content="Add Pharmacy" x:Name="AddPharmacyButton" Click="AddPharmacy_Click"/>
+                        <Button Content="Edit Pharmacy" x:Name="EditPharmacyButton" Click="EditPharmacy_Click"/>
+                        <Button Content="Delete Pharmacy" x:Name="DeletePharmacyButton" Click="DeletePharmacy_Click"/>
+                    </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Drugs">
@@ -33,7 +33,11 @@
                             <DataGridTextColumn Header="Shelf Life (days)" Binding="{Binding ShelfLife}" Width="Auto"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Content="Add Drug" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="AddDrug_Click"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                        <Button Content="Add Drug" x:Name="AddDrugButton" Click="AddDrug_Click"/>
+                        <Button Content="Edit Drug" x:Name="EditDrugButton" Click="EditDrug_Click"/>
+                        <Button Content="Delete Drug" x:Name="DeleteDrugButton" Click="DeleteDrug_Click"/>
+                    </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Stock">
@@ -47,7 +51,11 @@
                             <DataGridTextColumn Header="Price" Binding="{Binding Price}" Width="Auto"/>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Content="Add Stock" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="AddStock_Click"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                        <Button Content="Add Stock" x:Name="AddStockButton" Click="AddStock_Click"/>
+                        <Button Content="Edit Stock" x:Name="EditStockButton" Click="EditStock_Click"/>
+                        <Button Content="Delete Stock" x:Name="DeleteStockButton" Click="DeleteStock_Click"/>
+                    </StackPanel>
                 </Grid>
             </TabItem>
             <TabItem Header="Antibiotics 24/7">
